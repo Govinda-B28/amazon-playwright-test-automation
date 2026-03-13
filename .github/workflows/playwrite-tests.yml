@@ -22,26 +22,46 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    # Download Maven dependencies first
+    - name: Build Project
+      run: mvn -B clean compile
+
+    # Install Playwright browsers (Chromium, Firefox, WebKit)
     - name: Install Playwright Browsers
       run: mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
 
+    # Run automation tests
     - name: Run Tests
-      run: mvn clean test
+      run: mvn clean test -e
 
+    # Upload screenshots generated during tests
     - name: Upload Screenshots
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: screenshots
         path: screenshots/
 
+    # Upload video recordings
     - name: Upload Videos
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: videos
         path: videos/
 
+    # Upload Allure results
     - name: Upload Allure Results
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-results
         path: allure-results/
+
+    # Upload TestNG reports
+    - name: Upload Surefire Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: surefire-reports
+        path: target/surefire-reports/
