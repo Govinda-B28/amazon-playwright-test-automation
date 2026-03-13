@@ -1,0 +1,17 @@
+# Maven
+target/
+
+# Playwright outputs
+videos/
+screenshots/
+
+# Reports
+allure-results/
+allure-report/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
